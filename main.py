@@ -12,9 +12,15 @@ def main():
     reference_mkv_files = sorted(glob.glob(os.path.join(current_dir, '*.mkv')),
                                  key=utility.file_name_sorter)
 
-    target_sub_files = sorted(glob.glob(os.path.join(current_dir, '*.srt')) +
-                              glob.glob(os.path.join(current_dir, '*.ass')),
+    # First try with just .srt files
+    target_sub_files = sorted(glob.glob(os.path.join(current_dir, '*.srt')),
                               key=utility.file_name_sorter)
+
+    # Only include .ass files if the counts don't match
+    if len(reference_mkv_files) != len(target_sub_files):
+        target_sub_files = sorted(glob.glob(os.path.join(current_dir, '*.srt')) +
+                                  glob.glob(os.path.join(current_dir, '*.ass')),
+                                  key=utility.file_name_sorter)
 
     if len(reference_mkv_files) != len(target_sub_files):
         raise ValueError(
