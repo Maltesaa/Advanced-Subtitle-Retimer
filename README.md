@@ -24,5 +24,4 @@ Syncing text subtitles can be tricky due to an abudance of non-dialogue informat
 
 - pysubs2 (pip)
 - ffprobe
-- mkvtoolnix-cli
 - alass

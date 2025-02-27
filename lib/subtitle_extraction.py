@@ -108,7 +108,9 @@ def get_subtitle_stream_indices(all_files_streams: List[List[Dict[str, Any]]]) -
 
 def extract_subtitle(file_path: str, subtitle_index: int, target_path: str) -> None:
     """Extract a single subtitle stream from a video file."""
-    extract_command = ["mkvextract", "tracks", file_path, f"{subtitle_index}:{target_path}"]
+    extract_command = ["ffmpeg", "-hide_banner", "-loglevel", "warning", "-y",
+                       "-i", file_path, "-map", f"0:{subtitle_index}",
+                       "-c:s", "copy", target_path]
     utility.run_command(extract_command)
 
 
