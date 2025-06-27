@@ -105,6 +105,20 @@ def get_subtitle_stream_indices(all_files_streams: List[List[Dict[str, Any]]]) -
 
     return indices, codecs
 
+def get_file_extension_from_codec(codec: str) -> str:
+    """Map the codec to the appropriate file extension."""
+    extension_lookup_table = {
+        "subrip": "srt",
+        "srt": "srt",
+        "ass": "ass",
+        "ssa": "ssa",
+        "webvtt": "vtt",
+        "mov_text": "srt",
+    }
+    extension = extension_lookup_table.get(codec)
+    if not extension:
+        extension = codec
+    return extension
 
 def extract_subtitle(file_path: str, subtitle_index: int, target_path: str) -> None:
     """Extract a single subtitle stream from a video file."""
@@ -126,7 +140,8 @@ def extract_subtitles(video_file_paths: List[str],
 
     for video_path, codec, stream_idx in zip(video_file_paths, subtitle_codecs, selected_stream_indices):
         base_name = os.path.splitext(os.path.basename(video_path))[0]
-        output_path = os.path.join(temp_dir, f"{base_name}.{codec}")
+        file_extension = get_file_extension_from_codec(codec)
+        output_path = os.path.join(temp_dir, f"{base_name}.{file_extension}")
 
         print(f"Extracting subtitles from {os.path.basename(video_path)} to\n\t{os.path.basename(output_path)}")
         extract_subtitle(video_path, stream_idx, output_path)
